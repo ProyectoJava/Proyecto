@@ -21,7 +21,7 @@ static DefaultListModel modelo=new DefaultListModel();
     }
 
     private void carga(){
-        this.jTextField1.setText("seccion3304-->>"); 
+        this.jTextField1.setText("seccion3305-->>"); 
         this.jTextField1.requestFocus();
     }
 
