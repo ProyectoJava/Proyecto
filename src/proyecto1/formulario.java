@@ -74,20 +74,47 @@ static DefaultListModel limpiar=new DefaultListModel();
       
             String mandato=null;
             mandato=this.jTextField1.getText().substring(15,19).trim();
-            JOptionPane.showMessageDialog(null,mandato);
-            if(mandato.equalsIgnoreCase("mcrt")){
+            if(mandato.equalsIgnoreCase("crtc")){
                       String parametro = parametro();
-                      JOptionPane.showMessageDialog(null,parametro);
-                      String path = parametro;
-                      dir=new File(path);
+                      dir=new File(parametro);
                       dir.mkdir();
                       carga();
+                      
                       modelo.addElement("se ha creado la carpeta "+dir.getName());
                   jList1.setModel(modelo);
 
-                        }
+            }
+            if(mandato.equalsIgnoreCase("crtf")){
+                String parametro = parametro();
+                dir=new File(parametro);
+                try {
+                    if(dir.createNewFile()){
+                        modelo.addElement("Se ha creado el archivo "+dir.getName());
+                    }else{
+                        modelo.addElement("No se ha podido crear el archivo "+dir.getName());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                carga();
+                jList1.setModel(modelo);
+
+            }
+            
             if(mandato.equalsIgnoreCase("dele")){
-                      JOptionPane.showMessageDialog(null,"eliminar");
+                String parametro = parametro();
+                dir = new File(parametro);
+                if(dir.isDirectory()){
+                    modelo.addElement("Se elemino la carpeta "+dir.getName());
+                }
+                else if(dir.isFile()){
+                    modelo.addElement("Se elemino el archivo "+dir.getName());
+                }
+                dir.delete();
+                carga();
+                jList1.setModel(modelo);
+                
             }
             if(mandato.equalsIgnoreCase("rnmt")){
               String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
