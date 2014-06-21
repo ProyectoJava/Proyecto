@@ -26,14 +26,10 @@ String rutaGlobal;
 
     public formulario() throws IOException, Exception {
         setLocationRelativeTo(null);
+        crearAlmacen();
         
-        rutaGlobal = JOptionPane.showInputDialog("En que ruta quisiera trabajar:");
-        if(!rutaGlobal.endsWith("/")){
-            rutaGlobal += "/";
-        }
-        System.out.println(rutaGlobal);
-        escribirArchivo(crearArchivo(), rutaGlobal);
-        leerArchivo("/Users/ghondar/Desktop/archivos/ruta.txt");
+//        System.out.println(leerArchivo());
+        
         initComponents();
         carga();
     }
@@ -91,7 +87,7 @@ String rutaGlobal;
                 String mandato=null;
                 mandato=this.jTextField1.getText().substring(15,19).trim();
                 if(mandato.equalsIgnoreCase("crtc")){
-                    String parametro = parametro();
+                    String parametro = leerArchivo()+parametro();
                     dir=new File(parametro);
                     dir.mkdir();
                     carga();
@@ -100,7 +96,9 @@ String rutaGlobal;
 
                 }
                 if(mandato.equalsIgnoreCase("crtf")){
-                    String parametro = parametro();
+                    System.out.println(leerArchivo());
+                    System.out.println(parametro());
+                    String parametro = leerArchivo()+parametro();
                     dir=new File(parametro);
                     try {
                         if(dir.createNewFile()){
@@ -118,7 +116,7 @@ String rutaGlobal;
                 }
 
                 if(mandato.equalsIgnoreCase("dele")){
-                    String parametro = parametro();
+                    String parametro = leerArchivo()+parametro();
                     dir = new File(parametro);
                     if(dir.isDirectory()){
                         modelo.addElement("Se elemino la carpeta "+dir.getName());
@@ -134,7 +132,7 @@ String rutaGlobal;
                 if(mandato.equalsIgnoreCase("rnmt")){
                     String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
                     System.out.println(ruta);
-                    String parametro = parametro();
+                    String parametro = leerArchivo()+parametro();
                     dir=new File(parametro);
                     String cambio = parametro.replace(dir.getName(), ruta);
                     File dir1 = new File(cambio);
@@ -143,16 +141,15 @@ String rutaGlobal;
 
                 }
                 if(mandato.equalsIgnoreCase("lstr")){
-                    dir = new File(rutaGlobal);
+                    System.out.println(leerArchivo());
+                    dir = new File(leerArchivo());
                     String[] ficheros = dir.list();
                     for(int i = 0; i<ficheros.length;i++){
                     modelo.addElement(ficheros[i]);
                     }
                     carga();
                      jList1.setModel(modelo);
-                    deslizar();
-                    Thread.sleep(10000);
-                   
+                    deslizar();                   
                 }
                 if(mandato.equalsIgnoreCase("lmpr")){
                     modelo.clear();
@@ -164,8 +161,14 @@ String rutaGlobal;
                     jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
 
                 }
+                if(mandato.equalsIgnoreCase("ruta")){
+                    modelo.addElement(leerArchivo());
+                    jList1.setModel(modelo);
+                    carga();
+
+                }
             } catch (Exception e) {
-                System.out.println(e.getStackTrace());
+                System.out.println(e.getMessage());
             }
                       
             
@@ -175,8 +178,7 @@ String rutaGlobal;
     }//GEN-LAST:event_jTextField1KeyReleased
     
     public String parametro(){
-        String primero =this.jTextField1.getText().substring(20,this.jTextField1.getText().length()).trim();
-        String parametro = rutaGlobal + primero;
+        String parametro =this.jTextField1.getText().substring(20,this.jTextField1.getText().length()).trim();
         return parametro;
     }
     public void deslizar(){
@@ -187,24 +189,64 @@ String rutaGlobal;
         salida.close();
         return salida;
     }
+    public PrintWriter agregarPalabras(PrintWriter salida, String cadena) throws Exception{
+        salida.append(cadena);
+        salida.close();
+        return salida;
+    }
     public PrintWriter crearArchivo() throws IOException{
+        File directorio = new File("/Users/ghondar/Desktop/archivos");
+        if(!directorio.exists()) directorio.mkdir();
         File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");
         FileWriter writer = new FileWriter(archivo);
         PrintWriter salida = new PrintWriter(writer);
         return salida;
     }
-    public String leerArchivo(String ruta) throws Exception{
-        File archivo = new File(ruta);
+    public String leerArchivo() throws Exception{
+        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");
         FileReader fileReader = new FileReader(archivo);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String linea = null;
         String contenido = "";
         while((linea=bufferedReader.readLine())!=null){
-            System.out.println(linea);
-            contenido += " "+linea;
+            contenido += linea;
         }
         if(null != fileReader) fileReader.close();
         return contenido;
+    }
+    public boolean existencia(String ruta){
+        File carpeta = new File(ruta);
+        return carpeta.exists();
+    }
+    public void crearAlmacen() throws IOException, Exception{
+        if(existencia("/Users/ghondar/Desktop/archivos/ruta.txt")){
+            if(leerArchivo().isEmpty()) rutaGlobal = JOptionPane.showInputDialog("En que ruta quisiera trabajar:");
+            if(!leerArchivo().endsWith("/")){
+                String a = leerArchivo();
+                System.out.println(a);
+                System.out.println("hola");
+                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");
+                
+                FileWriter writer = new FileWriter(file);
+                PrintWriter salida = new PrintWriter(writer);
+                salida.write(a);
+                salida.append("/");
+                salida.close();
+            }
+            
+        }else{
+            rutaGlobal = JOptionPane.showInputDialog("En que ruta quisiera trabajar:");
+            escribirArchivo(crearArchivo(), rutaGlobal);
+            if(!leerArchivo().endsWith("/")){
+                String a = leerArchivo();
+                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");
+                FileWriter writer = new FileWriter(file);
+                PrintWriter salida = new PrintWriter(writer);
+                salida.write(a);
+                salida.append("/");
+                salida.close();
+            }
+        }
     }
  
     public static void main(String args[]) {
