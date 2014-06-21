@@ -15,8 +15,10 @@ public class formulario extends javax.swing.JFrame {
 File dir,file;
 static JList jlist1=new JList();
 static DefaultListModel modelo=new DefaultListModel();
+static DefaultListModel limpiar=new DefaultListModel();
 
     public formulario() {
+        setLocationRelativeTo(null);
         initComponents();carga();
     }
 
@@ -52,12 +54,12 @@ static DefaultListModel modelo=new DefaultListModel();
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTextField1)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -71,31 +73,54 @@ static DefaultListModel modelo=new DefaultListModel();
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
       
             String mandato=null;
-      mandato=this.jTextField1.getText().substring(15,19).trim();
-      JOptionPane.showMessageDialog(null,mandato);
-      if(mandato.equalsIgnoreCase("mcrt")){
-      String parametro=this.jTextField1.getText().
-              substring(20,this.jTextField1.getText().length()).trim();
-                JOptionPane.showMessageDialog(null,parametro);
-                String path=parametro;
-                dir=new File(path);
-                dir.mkdir();
-                carga();
-                modelo.addElement("Comando completado");
-                
-                
-      
-            jList1.setModel(modelo);
-                
-                  }
-      if(mandato.equalsIgnoreCase("dele")){
-                JOptionPane.showMessageDialog(null,"eliminar");
-      }
+            mandato=this.jTextField1.getText().substring(15,19).trim();
+            JOptionPane.showMessageDialog(null,mandato);
+            if(mandato.equalsIgnoreCase("mcrt")){
+                      String parametro = parametro();
+                      JOptionPane.showMessageDialog(null,parametro);
+                      String path = parametro;
+                      dir=new File(path);
+                      dir.mkdir();
+                      carga();
+                      modelo.addElement("se ha creado la carpeta "+dir.getName());
+                  jList1.setModel(modelo);
+
+                        }
+            if(mandato.equalsIgnoreCase("dele")){
+                      JOptionPane.showMessageDialog(null,"eliminar");
+            }
+            if(mandato.equalsIgnoreCase("rnmt")){
+              String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
+              String parametro = parametro();
+              String path = parametro;
+              dir=new File(path);
+              String directorio = dir.getName();
+            }
+            if(mandato.equalsIgnoreCase("lstr")){
+              String path = parametro();
+              dir = new File(path);
+              String[] ficheros = dir.list();
+              for(int i = 0; i<ficheros.length;i++){
+                  modelo.addElement(ficheros[i]);
+              }
+              jList1.setModel(modelo);
+              carga();
+            }
+            if(mandato.equalsIgnoreCase("lmpr")){
+              modelo.clear();
+              jList1.setModel(modelo);
+              carga();
+              
+            }
       
         }
         
     }//GEN-LAST:event_jTextField1KeyReleased
-
+    
+    public String parametro(){
+        String parametro=this.jTextField1.getText().substring(20,this.jTextField1.getText().length()).trim();
+        return parametro;
+    }
  
     public static void main(String args[]) {
    
