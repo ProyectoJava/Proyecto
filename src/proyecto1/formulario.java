@@ -5,7 +5,14 @@
 package proyecto1;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -15,11 +22,20 @@ public class formulario extends javax.swing.JFrame {
 File dir,file;
 static JList jlist1=new JList();
 static DefaultListModel modelo=new DefaultListModel();
-static DefaultListModel limpiar=new DefaultListModel();
+String rutaGlobal;
 
-    public formulario() {
+    public formulario() throws IOException, Exception {
         setLocationRelativeTo(null);
-        initComponents();carga();
+        
+        rutaGlobal = JOptionPane.showInputDialog("En que ruta quisiera trabajar:");
+        if(!rutaGlobal.endsWith("/")){
+            rutaGlobal += "/";
+        }
+        System.out.println(rutaGlobal);
+        escribirArchivo(crearArchivo(), rutaGlobal);
+        leerArchivo("/Users/ghondar/Desktop/archivos/ruta.txt");
+        initComponents();
+        carga();
     }
 
     private void carga(){
@@ -71,82 +87,124 @@ static DefaultListModel limpiar=new DefaultListModel();
         // TODO add your handling code here:
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-      
-            String mandato=null;
-            mandato=this.jTextField1.getText().substring(15,19).trim();
-            if(mandato.equalsIgnoreCase("crtc")){
-                      String parametro = parametro();
-                      dir=new File(parametro);
-                      dir.mkdir();
-                      carga();
-                      
-                      modelo.addElement("se ha creado la carpeta "+dir.getName());
-                  jList1.setModel(modelo);
+            try {
+                String mandato=null;
+                mandato=this.jTextField1.getText().substring(15,19).trim();
+                if(mandato.equalsIgnoreCase("crtc")){
+                    String parametro = parametro();
+                    dir=new File(parametro);
+                    dir.mkdir();
+                    carga();
+                    modelo.addElement("se ha creado la carpeta "+dir.getName());
+                    jList1.setModel(modelo);
 
-            }
-            if(mandato.equalsIgnoreCase("crtf")){
-                String parametro = parametro();
-                dir=new File(parametro);
-                try {
-                    if(dir.createNewFile()){
-                        modelo.addElement("Se ha creado el archivo "+dir.getName());
-                    }else{
-                        modelo.addElement("No se ha podido crear el archivo "+dir.getName());
+                }
+                if(mandato.equalsIgnoreCase("crtf")){
+                    String parametro = parametro();
+                    dir=new File(parametro);
+                    try {
+                        if(dir.createNewFile()){
+                            modelo.addElement("Se ha creado el archivo "+dir.getName());
+                        }else{
+                            modelo.addElement("No se ha podido crear el archivo "+dir.getName());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    carga();
+                    jList1.setModel(modelo);
+
                 }
 
-                carga();
-                jList1.setModel(modelo);
+                if(mandato.equalsIgnoreCase("dele")){
+                    String parametro = parametro();
+                    dir = new File(parametro);
+                    if(dir.isDirectory()){
+                        modelo.addElement("Se elemino la carpeta "+dir.getName());
+                    }
+                    else if(dir.isFile()){
+                        modelo.addElement("Se elemino el archivo "+dir.getName());
+                    }
+                    dir.delete();
+                    carga();
+                    jList1.setModel(modelo);
 
+                }
+                if(mandato.equalsIgnoreCase("rnmt")){
+                    String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
+                    System.out.println(ruta);
+                    String parametro = parametro();
+                    dir=new File(parametro);
+                    String cambio = parametro.replace(dir.getName(), ruta);
+                    File dir1 = new File(cambio);
+                    System.out.println(cambio);
+                    dir.renameTo(dir1);
+
+                }
+                if(mandato.equalsIgnoreCase("lstr")){
+                    dir = new File(rutaGlobal);
+                    String[] ficheros = dir.list();
+                    for(int i = 0; i<ficheros.length;i++){
+                    modelo.addElement(ficheros[i]);
+                    }
+                    carga();
+                     jList1.setModel(modelo);
+                    deslizar();
+                    Thread.sleep(10000);
+                   
+                }
+                if(mandato.equalsIgnoreCase("lmpr")){
+                    modelo.clear();
+                    jList1.setModel(modelo);
+                    carga();
+
+                }
+                if(mandato.equalsIgnoreCase("baja")){
+                    jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
+
+                }
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
             }
+                      
             
-            if(mandato.equalsIgnoreCase("dele")){
-                String parametro = parametro();
-                dir = new File(parametro);
-                if(dir.isDirectory()){
-                    modelo.addElement("Se elemino la carpeta "+dir.getName());
-                }
-                else if(dir.isFile()){
-                    modelo.addElement("Se elemino el archivo "+dir.getName());
-                }
-                dir.delete();
-                carga();
-                jList1.setModel(modelo);
-                
-            }
-            if(mandato.equalsIgnoreCase("rnmt")){
-              String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
-              String parametro = parametro();
-              String path = parametro;
-              dir=new File(path);
-              String directorio = dir.getName();
-            }
-            if(mandato.equalsIgnoreCase("lstr")){
-              String path = parametro();
-              dir = new File(path);
-              String[] ficheros = dir.list();
-              for(int i = 0; i<ficheros.length;i++){
-                  modelo.addElement(ficheros[i]);
-              }
-              jList1.setModel(modelo);
-              carga();
-            }
-            if(mandato.equalsIgnoreCase("lmpr")){
-              modelo.clear();
-              jList1.setModel(modelo);
-              carga();
-              
-            }
       
         }
         
     }//GEN-LAST:event_jTextField1KeyReleased
     
     public String parametro(){
-        String parametro=this.jTextField1.getText().substring(20,this.jTextField1.getText().length()).trim();
+        String primero =this.jTextField1.getText().substring(20,this.jTextField1.getText().length()).trim();
+        String parametro = rutaGlobal + primero;
         return parametro;
+    }
+    public void deslizar(){
+        jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
+    }
+    public PrintWriter escribirArchivo(PrintWriter salida, String cadena) throws  Exception{
+        salida.write(cadena);
+        salida.close();
+        return salida;
+    }
+    public PrintWriter crearArchivo() throws IOException{
+        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");
+        FileWriter writer = new FileWriter(archivo);
+        PrintWriter salida = new PrintWriter(writer);
+        return salida;
+    }
+    public String leerArchivo(String ruta) throws Exception{
+        File archivo = new File(ruta);
+        FileReader fileReader = new FileReader(archivo);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String linea = null;
+        String contenido = "";
+        while((linea=bufferedReader.readLine())!=null){
+            System.out.println(linea);
+            contenido += " "+linea;
+        }
+        if(null != fileReader) fileReader.close();
+        return contenido;
     }
  
     public static void main(String args[]) {
@@ -178,7 +236,11 @@ static DefaultListModel limpiar=new DefaultListModel();
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new formulario().setVisible(true);
+                try {
+                    new formulario().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(formulario.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
