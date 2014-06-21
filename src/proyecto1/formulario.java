@@ -7,12 +7,16 @@ package proyecto1;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -27,7 +31,7 @@ String rutaGlobal;
     public formulario() throws IOException, Exception {
         setLocationRelativeTo(null);
         crearAlmacen();
-        
+        zipear("/Users/ghondar/Desktop/chat");
 //        System.out.println(leerArchivo());
         
         initComponents();
@@ -165,7 +169,12 @@ String rutaGlobal;
                     modelo.addElement(leerArchivo());
                     jList1.setModel(modelo);
                     carga();
-
+                }
+                if(mandato.equalsIgnoreCase("cmbr")){
+                    String cambio = JOptionPane.showInputDialog("Cual es la ruta nueva?");
+                    escribirArchivo(crearArchivo(), cambio);
+                    crearAlmacen();
+                    carga();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -247,6 +256,36 @@ String rutaGlobal;
                 salida.close();
             }
         }
+    }
+    public static String zipear(String dir){
+        File d = new File(dir);
+        String destino = dir.substring(0,dir.length()-d.getName().length()).trim();
+        try {
+            System.out.println(destino);
+            if(!d.isDirectory()) throw new IllegalArgumentException(dir+ " no es un Directorio.");
+            String [] entries = d.list();
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(destino+d.getName()+".zip"));
+            for(int i =0; i< entries.length; i++){
+                File f = new File(d, entries[i]);
+                if(f.isDirectory()) continue;
+                FileInputStream in = new FileInputStream(f);
+                ZipEntry entry = new ZipEntry(f.getName());
+                out.putNextEntry(entry);
+                while((bytesRead = in.read(buffer))!= -1){
+                    out.write(buffer,0,bytesRead);
+                    
+                }
+                in.close();
+            }
+            out.close();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+        return dir.substring(0,d.getName().length()).trim()+d.getName() + ".zip";
     }
  
     public static void main(String args[]) {
