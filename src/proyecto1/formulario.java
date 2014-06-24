@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -90,12 +91,11 @@ String rutaGlobal;
                 String mandato=null;
                 mandato=this.jTextField1.getText().substring(15,19).trim();
                 if(mandato.equalsIgnoreCase("crtc")){
-                    try {
-                       if(parametro().equals("--help")){
-                        String ayuda = "crtc --> Crea una carpeta";
-                        modelo.addElement(ayuda); 
-                    }
-                    } catch (Exception e) {
+                    
+                    if(parametro().equals("--help")){
+                     String ayuda = "crtc --> Crea una carpeta";
+                     modelo.addElement(ayuda); 
+                    }else{
                         String parametro = leerRuta()+parametro();
                         dir=new File(parametro);
                         dir.mkdir();                    
@@ -106,15 +106,11 @@ String rutaGlobal;
                     
 
                 }
-                if(mandato.equalsIgnoreCase("crtf")){        
-                    try {
-                        if(parametro().equals("--help")){
-                            String ayuda = "crtf --> Crea un archivo";
-                            modelo.addElement(ayuda); 
-                        }else{
-                            
-                        }
-                    } catch (Exception e) {
+                if(mandato.equalsIgnoreCase("crtf")){    
+                    if(parametro().equals("--help")){
+                        String ayuda = "crtf --> Crea un archivo";
+                        modelo.addElement(ayuda); 
+                    }else{
                         String parametro = leerRuta()+parametro();
                         dir=new File(parametro);
                         try {
@@ -127,18 +123,17 @@ String rutaGlobal;
                             i.printStackTrace();
                         }
                     }
-                    
                     carga();
                     jList1.setModel(modelo);
                 }
                 if(mandato.equalsIgnoreCase("dele")){
-                    try {
-                        if(parametro().equals("--help")){
-                        System.out.println(parametro());
-                        String ayuda = "dele --> Borra un archivo o carpeta";
-                        modelo.addElement(ayuda); 
+                    
+                    if(parametro().equals("--help")){
+                    System.out.println(parametro());
+                    String ayuda = "dele --> Borra un archivo o carpeta";
+                    modelo.addElement(ayuda); 
                     }
-                    } catch (Exception e) {
+                    else{
                         String parametro = leerRuta()+parametro();
                         dir = new File(parametro);
                         if(dir.isDirectory()){
@@ -155,12 +150,12 @@ String rutaGlobal;
                 }
                 if(mandato.equalsIgnoreCase("rnmt")){
                     
-                    try {
-                        if(parametro().equals("--help")){
-                            String ayuda = "rnmt --> Renombra un archivo o carpeta";
-                            modelo.addElement(ayuda); 
-                        }
-                    } catch (Exception e) {
+
+                    if(parametro().equals("--help")){
+                        String ayuda = "rnmt --> Renombra un archivo o carpeta";
+                        modelo.addElement(ayuda); 
+                    }else{
+
                         String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre:");               
                         String parametro = leerRuta()+parametro();
                         dir=new File(parametro);
@@ -170,7 +165,7 @@ String rutaGlobal;
                         modelo.addElement("Se cambio el nombre a: "+nuevoNombre);
                     }
                     carga();
-                    jlist1.setModel(modelo);
+                    jList1.setModel(modelo);
 
                 }
                 if(mandato.equalsIgnoreCase("lstr")){
@@ -232,63 +227,86 @@ String rutaGlobal;
                     
                 }
                 if(mandato.equalsIgnoreCase("cmbr")){
-                    try {
-                        if(parametro().equals("--help")){
-                            String ayuda = "cmbr --> Cambia la ruta de la shell";
-                            modelo.addElement(ayuda); 
-                        }
-                    } catch (Exception e) {
+                    
+                    if(parametro().equals("--help")){
+                        String ayuda = "cmbr --> Cambia la ruta de la shell";
+                        modelo.addElement(ayuda); 
+                        jList1.setModel(modelo);
+
+                    }else{
+
                         String cambio = JOptionPane.showInputDialog("Cual es la ruta nueva?");
                         escribirArchivo(crearArchivo(), cambio);
                         crearAlmacen();
                     }
-                                     
+                          
                     carga();
                 }
                 if(mandato.equalsIgnoreCase("zipr")){
-                    try {
-                        if(parametro().equals("--help")){
-                            String ayuda = "zipr --> Comprime una carpeta en la misma ruta";
-                            modelo.addElement(ayuda); 
-                        }
-                    } catch (Exception e) {
+                    
+                    if(parametro().equals("--help")){
+                        String ayuda = "zipr --> Comprime una carpeta en la misma ruta";
+                        modelo.addElement(ayuda); 
+                    }else{
                         String mensaje = zipear(leerRuta()+parametro());
-                       modelo.addElement(mensaje);
-                    }                    
+                        modelo.addElement(mensaje);                  
+                        
+                    }
                     carga();
-                    jlist1.setModel(modelo);
+                    jList1.setModel(modelo);
                     
                 }
-                if(mandato.equalsIgnoreCase("bscr")){
-                    try {
-                        if(parametro().equals("--help")){
-                        System.out.println(parametro());
-                        String ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                if(mandato.equalsIgnoreCase("ping")){
+                    
+                    if(parametro().equals("--help")){
+                        String ayuda = "ping --> Verifica la disponibilidad de un host en tu Red";
                         modelo.addElement(ayuda); 
+                    }else{
+                        InetAddress ping;
+                        String ip = parametro();
+                        System.out.println(parametro());
+                        String salida;                    
+                        ping = InetAddress.getByName(ip);
+                        if(ping.isReachable(5000)) salida = ip+" - Existe en tu Red!!"; 
+                        else salida = ip + " - No Existe en tu Red!!";
+                        modelo.addElement(salida);
                     }
-                    } catch (Exception e) {
-                        String parametro = parametro();
-                        dir = new File(leerRuta());
-                        String[] ficheros = dir.list();
-                        String existencia = null;
-                        for(int i = 0; i<ficheros.length;i++){
-                            if(parametro.toLowerCase().equals(ficheros[i].toLowerCase())){
-                                existencia = "Si existe el archivo";
-                                modelo.addElement(existencia);
-                            }
-                        }
-                        if(existencia == null){
-                            existencia = "No existe el archivo o directorio";
-                                modelo.addElement(existencia);
-                        }
-                    }            
+                                      
                     carga();
-                    jlist1.setModel(modelo);
+                    jList1.setModel(modelo);
+                    
+                }
+                
+                if(mandato.equalsIgnoreCase("bscr")){
+                    
+                    if(parametro().equals("--help")){
+                    System.out.println(parametro());
+                    String ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                    modelo.addElement(ayuda); 
+                    }
+
+                    String parametro = parametro();
+                    dir = new File(leerRuta());
+                    String[] ficheros = dir.list();
+                    String existencia = null;
+                    for(int i = 0; i<ficheros.length;i++){
+                        if(parametro.toLowerCase().equals(ficheros[i].toLowerCase())){
+                            existencia = "Si existe el archivo";
+                            modelo.addElement(existencia);
+                        }
+                    }
+                    if(existencia == null){
+                        existencia = "No existe el archivo o directorio";
+                            modelo.addElement(existencia);
+                    }
+                               
+                    carga();
+                    jList1.setModel(modelo);
                 }
                 if(mandato.equalsIgnoreCase("help")){
                     String ayuda;
                     String[] fichero;
-                    for(int i = 0; i<11; i++){
+                    for(int i = 0; i<13; i++){
                         switch(i){
                             case 0:
                                 ayuda = "crtc --> Crea una carpeta";
@@ -362,6 +380,12 @@ String rutaGlobal;
                                 carga();
                                 jList1.setModel(modelo);
                                 break;
+                            case 12:
+                                ayuda = "ping --> Verifica la disponibilidad de un host en tu Red";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
                         }
                     }
                     switch(parametro()){
@@ -428,6 +452,12 @@ String rutaGlobal;
                             break;
                         case "bscr":
                             ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "ping":
+                            ayuda = "ping --> Verifica la disponibilidad de un host en tu Red";
                             modelo.addElement(ayuda); 
                             carga();
                             jList1.setModel(modelo);
@@ -554,6 +584,7 @@ String rutaGlobal;
         }
         return "Carpeta comprimida a "+d.getName() + ".zip";
     }
+    
  
     public static void main(String args[]) {
    
