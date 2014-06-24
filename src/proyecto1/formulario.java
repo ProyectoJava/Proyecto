@@ -90,117 +90,356 @@ String rutaGlobal;
                 String mandato=null;
                 mandato=this.jTextField1.getText().substring(15,19).trim();
                 if(mandato.equalsIgnoreCase("crtc")){
-                    String parametro = leerRuta()+parametro();
-                    dir=new File(parametro);
-                    dir.mkdir();
+                    try {
+                       if(parametro().equals("--help")){
+                        String ayuda = "crtc --> Crea una carpeta";
+                        modelo.addElement(ayuda); 
+                    }
+                    } catch (Exception e) {
+                        String parametro = leerRuta()+parametro();
+                        dir=new File(parametro);
+                        dir.mkdir();                    
+                        modelo.addElement("se ha creado la carpeta "+dir.getName());
+                    }
                     carga();
-                    modelo.addElement("se ha creado la carpeta "+dir.getName());
                     jList1.setModel(modelo);
+                    
 
                 }
-                if(mandato.equalsIgnoreCase("crtf")){
-                    System.out.println(leerRuta());
-                    System.out.println(parametro());
-                    String parametro = leerRuta()+parametro();
-                    dir=new File(parametro);
+                if(mandato.equalsIgnoreCase("crtf")){        
                     try {
-                        if(dir.createNewFile()){
-                            modelo.addElement("Se ha creado el archivo "+dir.getName());
+                        if(parametro().equals("--help")){
+                            String ayuda = "crtf --> Crea un archivo";
+                            modelo.addElement(ayuda); 
                         }else{
-                            modelo.addElement("No se ha podido crear el archivo "+dir.getName());
+                            
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        String parametro = leerRuta()+parametro();
+                        dir=new File(parametro);
+                        try {
+                            if(dir.createNewFile()){
+                                modelo.addElement("Se ha creado el archivo "+dir.getName());
+                            }else{
+                                modelo.addElement("No se ha podido crear el archivo "+dir.getName());
+                            }
+                        } catch (Exception i) {
+                            i.printStackTrace();
+                        }
                     }
-
+                    
                     carga();
                     jList1.setModel(modelo);
-
                 }
-
                 if(mandato.equalsIgnoreCase("dele")){
-                    String parametro = leerRuta()+parametro();
-                    dir = new File(parametro);
-                    if(dir.isDirectory()){
-                        modelo.addElement("Se elemino la carpeta "+dir.getName());
+                    try {
+                        if(parametro().equals("--help")){
+                        System.out.println(parametro());
+                        String ayuda = "dele --> Borra un archivo o carpeta";
+                        modelo.addElement(ayuda); 
                     }
-                    else if(dir.isFile()){
-                        modelo.addElement("Se elemino el archivo "+dir.getName());
+                    } catch (Exception e) {
+                        String parametro = leerRuta()+parametro();
+                        dir = new File(parametro);
+                        if(dir.isDirectory()){
+                            modelo.addElement("Se elemino la carpeta "+dir.getName());
+                        }
+                        else if(dir.isFile()){
+                            modelo.addElement("Se elemino el archivo "+dir.getName());
+                        }
+                        dir.delete();
                     }
-                    dir.delete();
                     carga();
                     jList1.setModel(modelo);
 
                 }
                 if(mandato.equalsIgnoreCase("rnmt")){
-                    String ruta = JOptionPane.showInputDialog("Que nombre le pones:");
-                    System.out.println(ruta);
-                    String parametro = leerRuta()+parametro();
-                    dir=new File(parametro);
-                    String cambio = parametro.replace(dir.getName(), ruta);
-                    File dir1 = new File(cambio);
-                    System.out.println(cambio);
-                    dir.renameTo(dir1);
+                    
+                    try {
+                        if(parametro().equals("--help")){
+                            String ayuda = "rnmt --> Renombra un archivo o carpeta";
+                            modelo.addElement(ayuda); 
+                        }
+                    } catch (Exception e) {
+                        String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre:");               
+                        String parametro = leerRuta()+parametro();
+                        dir=new File(parametro);
+                        String cambio = parametro.replace(dir.getName(), nuevoNombre);
+                        File dir1 = new File(cambio);
+                        dir.renameTo(dir1);
+                        modelo.addElement("Se cambio el nombre a: "+nuevoNombre);
+                    }
+                    carga();
+                    jlist1.setModel(modelo);
 
                 }
                 if(mandato.equalsIgnoreCase("lstr")){
-                    System.out.println(leerRuta());
-                    dir = new File(leerRuta());
-                    String[] ficheros = dir.list();
-                    for(int i = 0; i<ficheros.length;i++){
-                    modelo.addElement(ficheros[i]);
+                    try {
+                        if(parametro().equals("--help")){
+                        String ayuda = "lstr --> Lista los elementos de la ruta";
+                        modelo.addElement(ayuda); 
                     }
+                    } catch (Exception e) {
+                        dir = new File(leerRuta());
+                        String[] ficheros = dir.list();
+                        for(int i = 0; i<ficheros.length;i++){
+                            modelo.addElement(ficheros[i]);
+                        }
+                    }
+                     
                     carga();
-                     jList1.setModel(modelo);                
+                    jList1.setModel(modelo);                
                 }
                 if(mandato.equalsIgnoreCase("lmpr")){
-                    modelo.clear();
-                    jList1.setModel(modelo);
+                    try {
+                        if(parametro().equals("--help")){                           
+                            String ayuda = "lmpr --> Limpia la shell";
+                            modelo.addElement(ayuda); 
+                        }
+                    } catch (Exception e) {
+                        modelo.clear();
+                        jList1.setModel(modelo);
+                    }
+                    
                     carga();
 
                 }
                 if(mandato.equalsIgnoreCase("baja")){
-                    jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
+                    try {
+                       if(parametro().equals("--help")){
+                            System.out.println(parametro());
+                            String ayuda = "baja --> Baja la barra de la shell";
+                            modelo.addElement(ayuda); 
+                       } 
+                    } catch (Exception e) {
+                        jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum()); 
+                    }
+                    
                     carga();
-
                 }
                 if(mandato.equalsIgnoreCase("ruta")){
-                    modelo.addElement(leerRuta());
-                    jList1.setModel(modelo);
+                    try {
+                        if(parametro().equals("--help")){
+                            System.out.println(parametro());
+                            String ayuda = "ruta --> Muestra la ruta actual de la shell";
+                            modelo.addElement(ayuda); 
+                        }                        
+                    } catch (Exception e) {
+                        modelo.addElement(leerRuta());
+                    }
                     carga();
+                    jList1.setModel(modelo);
+                    
                 }
                 if(mandato.equalsIgnoreCase("cmbr")){
-                    String cambio = JOptionPane.showInputDialog("Cual es la ruta nueva?");
-                    escribirArchivo(crearArchivo(), cambio);
-                    crearAlmacen();
+                    try {
+                        if(parametro().equals("--help")){
+                            String ayuda = "cmbr --> Cambia la ruta de la shell";
+                            modelo.addElement(ayuda); 
+                        }
+                    } catch (Exception e) {
+                        String cambio = JOptionPane.showInputDialog("Cual es la ruta nueva?");
+                        escribirArchivo(crearArchivo(), cambio);
+                        crearAlmacen();
+                    }
+                                     
                     carga();
                 }
                 if(mandato.equalsIgnoreCase("zipr")){
-                    String mensaje = zipear(leerRuta()+parametro());
-                    modelo.addElement(mensaje);
-                    jlist1.setModel(modelo);
+                    try {
+                        if(parametro().equals("--help")){
+                            String ayuda = "zipr --> Comprime una carpeta en la misma ruta";
+                            modelo.addElement(ayuda); 
+                        }
+                    } catch (Exception e) {
+                        String mensaje = zipear(leerRuta()+parametro());
+                       modelo.addElement(mensaje);
+                    }                    
                     carga();
+                    jlist1.setModel(modelo);
+                    
                 }
                 if(mandato.equalsIgnoreCase("bscr")){
-                    String parametro = parametro();
-                    dir = new File(leerRuta());
-                    String[] ficheros = dir.list();
-                    String existencia = null;
-                    for(int i = 0; i<ficheros.length;i++){
-                        if(parametro.toLowerCase().equals(ficheros[i].toLowerCase().toString())){
-                            existencia = "Si existe el archivo";
-                            modelo.addElement(existencia);
+                    try {
+                        if(parametro().equals("--help")){
+                        System.out.println(parametro());
+                        String ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                        modelo.addElement(ayuda); 
+                    }
+                    } catch (Exception e) {
+                        String parametro = parametro();
+                        dir = new File(leerRuta());
+                        String[] ficheros = dir.list();
+                        String existencia = null;
+                        for(int i = 0; i<ficheros.length;i++){
+                            if(parametro.toLowerCase().equals(ficheros[i].toLowerCase())){
+                                existencia = "Si existe el archivo";
+                                modelo.addElement(existencia);
+                            }
                         }
-                    }
-                    if(existencia == null){
-                        existencia = "No existe el archivo o directorio";
-                            modelo.addElement(existencia);
-                    }
+                        if(existencia == null){
+                            existencia = "No existe el archivo o directorio";
+                                modelo.addElement(existencia);
+                        }
+                    }            
                     carga();
                     jlist1.setModel(modelo);
-                    System.out.println("hola");
                 }
                 if(mandato.equalsIgnoreCase("help")){
+                    String ayuda;
+                    String[] fichero;
+                    for(int i = 0; i<11; i++){
+                        switch(i){
+                            case 0:
+                                ayuda = "crtc --> Crea una carpeta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 1:
+                                ayuda = "crtf --> Crea un archivo";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 2:
+                                ayuda = "dele --> Borra un archivo o carpeta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 3:
+                                ayuda = "rnmt --> renombra un archivo o carpeta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 4:
+                                ayuda = "lstr --> Lista los elementos de la ruta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 5:
+                                ayuda = "lmpr --> Limpia la shell";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 6:
+                                ayuda = "baja --> Baja la barra de la shell";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 7:
+                                ayuda = "ruta --> Muestra la ruta actual de la shell";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 8:
+                                ayuda = "cmbr --> Cambia la ruta de la shell";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 9:
+                                ayuda = "zipr --> Comprime una carpeta en la misma ruta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 10:
+                                ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 11:
+                                ayuda = "help --> Despliega una leyenda de los comandos";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                        }
+                    }
+                    switch(parametro()){
+                        case "crtc":
+                            ayuda = "crtc --> Crea una carpeta";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                            
+                        case "crtf":
+                            ayuda = "crtf --> Crea un archivo";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "dele":
+                            ayuda = "dele --> Borra un archivo o carpeta";
+                            modelo.addElement(ayuda);
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "rnmt":
+                            ayuda = "rnmt --> renombra un archivo o carpeta";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "lstr":
+                            ayuda = "lstr --> Lista los elementos de la ruta";
+                            modelo.addElement(ayuda);
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "lmpr":
+                            ayuda = "lmpr --> Limpia la shell";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "baja":
+                            ayuda = "baja --> Baja la barra de la shell";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "ruta":
+                            ayuda = "ruta --> Muestra la ruta actual de la shell";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "cmbr":
+                            ayuda = "cmbr --> Cambia la ruta de la shell";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "zipr":
+                            ayuda = "zipr --> Comprime una carpeta en la misma ruta";
+                            modelo.addElement(ayuda);
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "bscr":
+                            ayuda = "bscr --> Busca un archivo o carpeta en la ruta";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "help":
+                            ayuda = "help --> Despliega una leyenda de los comandos";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                    }
+                    
                     
                 }
                 
