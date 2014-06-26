@@ -4,6 +4,7 @@
  */
 package proyecto1;
 
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -38,10 +39,11 @@ String rutaGlobal;
         crearAlmacen();
 //        System.out.println(leerRuta());
         setUndecorated(true); 
-        setOpacity(0.70f); 
+        setOpacity(0.70f);         
         initComponents();
         carga();
         this.setLocationRelativeTo(null);
+        
     }
 
     private void carga(){
@@ -293,7 +295,7 @@ String rutaGlobal;
                             modelo.addElement(ayuda); 
                        } 
                     } catch (Exception e) {
-                        jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum()); 
+                        jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
                     }
                     
                     carga();
@@ -304,7 +306,8 @@ String rutaGlobal;
                             System.out.println(parametro());
                             String ayuda = "ruta --> Muestra la ruta actual de la shell";
                             modelo.addElement(ayuda); 
-                        }                        
+                        }
+                        
                     } catch (Exception e) {
                         modelo.addElement(leerRuta());
                     }
@@ -313,18 +316,18 @@ String rutaGlobal;
                     
                 }
                 if(mandato.equalsIgnoreCase("cmbr")){
-                    
-                    if(parametro().equals("--help")){
-                        String ayuda = "cmbr --> Cambia la ruta de la shell";
-                        modelo.addElement(ayuda); 
-                        jList1.setModel(modelo);
+                    try {
+                        if(parametro().equals("--help")){
+                            String ayuda = "cmbr --> Cambia la ruta de la shell";
+                            modelo.addElement(ayuda); 
+                            jList1.setModel(modelo);
 
-                    }else{
-
+                        }
+                    } catch (Exception e) {
                         String cambio = JOptionPane.showInputDialog("Cual es la ruta nueva?");
                         escribirArchivo(crearArchivo(), cambio);
                         crearAlmacen();
-                    }
+                    }                 
                           
                     carga();
                 }
@@ -388,6 +391,19 @@ String rutaGlobal;
                                
                     carga();
                     jList1.setModel(modelo);
+                }
+                if(mandato.equalsIgnoreCase("open")){
+                    
+                    if(parametro().equals("--help")){
+                    System.out.println(parametro());
+                    String ayuda = "open --> Abre un archivo o carpeta de la ruta";
+                    modelo.addElement(ayuda); 
+                    }else{
+                        String parametro = leerRuta()+parametro();
+                        File file = new File(parametro);
+                        Desktop.getDesktop().open(file);
+                    }
+                    carga();
                 }
                 if(mandato.equalsIgnoreCase("help")){
                     String ayuda;
