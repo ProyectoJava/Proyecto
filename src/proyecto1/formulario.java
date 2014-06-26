@@ -408,7 +408,7 @@ String rutaGlobal;
                 if(mandato.equalsIgnoreCase("help")){
                     String ayuda;
                     String[] fichero;
-                    for(int i = 0; i<13; i++){
+                    for(int i = 0; i<14; i++){
                         switch(i){
                             case 0:
                                 ayuda = "crtc --> Crea una carpeta";
@@ -477,13 +477,19 @@ String rutaGlobal;
                                 jList1.setModel(modelo);
                                 break;
                             case 11:
-                                ayuda = "help --> Despliega una leyenda de los comandos";
+                                ayuda = "open --> Abre un archivo o carpeta de la ruta";
                                 modelo.addElement(ayuda); 
                                 carga();
                                 jList1.setModel(modelo);
                                 break;
                             case 12:
                                 ayuda = "ping --> Verifica la disponibilidad de un host en tu Red";
+                                modelo.addElement(ayuda); 
+                                carga();
+                                jList1.setModel(modelo);
+                                break;
+                            case 13:
+                                ayuda = "help --> Despliega una leyenda de los comandos";
                                 modelo.addElement(ayuda); 
                                 carga();
                                 jList1.setModel(modelo);
@@ -560,6 +566,12 @@ String rutaGlobal;
                             break;
                         case "ping":
                             ayuda = "ping --> Verifica la disponibilidad de un host en tu Red";
+                            modelo.addElement(ayuda); 
+                            carga();
+                            jList1.setModel(modelo);
+                            break;
+                        case "open":
+                            ayuda = "open --> Abre un archivo o carpeta de la ruta";
                             modelo.addElement(ayuda); 
                             carga();
                             jList1.setModel(modelo);
