@@ -670,13 +670,13 @@ String rutaGlobal;
     public PrintWriter crearArchivo() throws IOException{
         File directorio = new File("/Users/ghondar/Desktop/archivos");// estas lineas cambiarlas por esta: File directorio = new File("c:\\config");
         if(!directorio.exists()) directorio.mkdir();
-        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File directorio = new File("c:\\config\\ruta.txt");
+        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File archivo = new File("c:\\config\\ruta.txt");
         FileWriter writer = new FileWriter(archivo);
         PrintWriter salida = new PrintWriter(writer);
         return salida;
     }
     public String leerRuta() throws Exception{
-        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File directorio = new File("c:\\config\\ruta.txt");
+        File archivo = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File archivo = new File("c:\\config\\ruta.txt");
         FileReader fileReader = new FileReader(archivo);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String linea = null;
@@ -692,13 +692,13 @@ String rutaGlobal;
         return carpeta.exists();
     }
     public void crearAlmacen() throws IOException, Exception{
-        if(existencia("/Users/ghondar/Desktop/archivos/ruta.txt")){// estas lineas cambiarlas por esta: File directorio = new File("c:\\config\\ruta.txt");
+        if(existencia("/Users/ghondar/Desktop/archivos/ruta.txt")){// estas lineas cambiarlas por esta: if(existencia("c:\\config\\ruta.txt")){
             if(leerRuta().isEmpty()) rutaGlobal = JOptionPane.showInputDialog("En que ruta quisiera trabajar:");
             if(!leerRuta().endsWith("/")){// estas lineas cambiarlas por esta: if(!leerRuta().endsWith("\\")){
                 String a = leerRuta();
                 System.out.println(a);
                 System.out.println("hola");
-                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File directorio = new File("c:\\config\\ruta.txt");
+                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File file = new File("c:\\config\\ruta.txt");
                 
                 FileWriter writer = new FileWriter(file);
                 PrintWriter salida = new PrintWriter(writer);
@@ -712,7 +712,7 @@ String rutaGlobal;
             escribirArchivo(crearArchivo(), rutaGlobal);
             if(!leerRuta().endsWith("/")){// estas lineas cambiarlas por esta: if(!leerRuta().endsWith("\\")){
                 String a = leerRuta();
-                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File directorio = new File("c:\\config\\ruta.txt");
+                File file = new File("/Users/ghondar/Desktop/archivos/ruta.txt");// estas lineas cambiarlas por esta: File file = new File("c:\\config\\ruta.txt");
                 FileWriter writer = new FileWriter(file);
                 PrintWriter salida = new PrintWriter(writer);
                 salida.write(a);
