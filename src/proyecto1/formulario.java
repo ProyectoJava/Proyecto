@@ -5,7 +5,6 @@
 package proyecto1;
 
 import java.awt.Desktop;
-import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -35,17 +34,16 @@ static DefaultListModel modelo=new DefaultListModel();
 String rutaGlobal;
 
     public formulario() throws IOException, Exception {
-        
+       
         crearAlmacen();
-//        System.out.println(leerRuta());
         setUndecorated(true); 
-        setOpacity(0.70f);         
+        setOpacity(0.70f);  
         initComponents();
         carga();
         this.setLocationRelativeTo(null);
         
     }
-
+    
     private void carga(){
         this.jTextField1.setText("seccion3305-->>"); 
         this.jTextField1.requestFocus();
@@ -155,15 +153,15 @@ String rutaGlobal;
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
